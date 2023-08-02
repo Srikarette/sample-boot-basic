@@ -14,10 +14,25 @@ public class HelloControllerTest {
 
     @Test
     public void testHello() {
-
         // Act
-        String response = controller.hello();
+        String response = controller.hello("tang");
         // Assert
-        assertEquals("Hello World!", response);
+        assertEquals("Hello World! tang", response);
+    }
+
+    @Test
+    public void testPlus() {
+        // Act
+        int response = controller.Plus(8, 9);
+        // Assert
+        assertEquals(17, response);
+    }
+
+    @Test
+    public void testMultiply() {
+        // Act
+        int response = controller.Sum(5, 3);
+        // Assert
+        assertEquals(15, response);
     }
 }
