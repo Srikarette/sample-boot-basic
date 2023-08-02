@@ -7,19 +7,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HelloController {
-    @RequestMapping("/hello")
+    @RequestMapping("/hello/{name}")
     String hello(@PathVariable String name) {
         return "Hello World! " + name;
     }
 
-    @GetMapping("/cal/{num1}/{num2}")
+    @GetMapping("/plus/{num1}/{num2}")
     int Plus(@PathVariable int num1, @PathVariable int num2) {
         int result = num2 + num1;
         return result;
     }
 
     // Variable name after (@.....(here) should not be the same)
-    @GetMapping("/cal2/{num1}/{num2}")
+    @GetMapping("/multiply/{num1}/{num2}")
     int Sum(@PathVariable int num1, @PathVariable int num2) {
         if (num1 != 0 || num2 != 0) {
             int result = num2 * num1;
