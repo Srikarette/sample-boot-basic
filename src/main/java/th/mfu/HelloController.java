@@ -12,6 +12,11 @@ public class HelloController {
         return "Hello World! " + name;
     }
 
+    @GetMapping("/hello")
+    String hello() {
+        return "Hello World!";
+    }
+
     @GetMapping("/plus/{num1}/{num2}")
     int Plus(@PathVariable int num1, @PathVariable int num2) {
         int result = num2 + num1;
