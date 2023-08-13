@@ -9,4 +9,6 @@ public interface EmployeeRespository extends CrudRepository<Employee, Long> {
     public List<Employee> findByfname(String firstName);
 
     public List<Employee> findByfnameStartingWith(String prefix);
+
+    public List<Employee> findByOrderByFnameAsc();
 }

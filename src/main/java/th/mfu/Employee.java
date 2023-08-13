@@ -2,10 +2,14 @@ package th.mfu;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -15,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @JsonProperty("fname")
     private String fname;
@@ -27,10 +31,19 @@ public class Employee {
     private Date bdate;
     private long salary;
 
+    // relationship to other entity(Position Class)
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "position_id", referencedColumnName = "id")
+    private Position position;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
+
     public Employee() {
     }
 
-    public Employee(long id, String fname, String lname, Date bdate, long salary) {
+    public Employee(Long id, String fname, String lname, Date bdate, long salary) {
         this.id = id;
         this.fname = fname;
         this.lname = lname;
@@ -38,11 +51,11 @@ public class Employee {
         this.salary = salary;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -76,6 +89,22 @@ public class Employee {
 
     public void setSalary(long salary) {
         this.salary = salary;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
 }

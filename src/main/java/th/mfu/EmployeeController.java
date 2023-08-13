@@ -21,10 +21,13 @@ public class EmployeeController {
     @Autowired
     private EmployeeRespository employeeRespository;
 
+    @Autowired
+    private EmployeeMapper employeeMapper;
+
     // Select all Employee
     @GetMapping("/employees")
     public Collection<Employee> getAllEmployees() {
-        return employeeRespository.findAll();
+        return employeeRespository.findByOrderByFnameAsc();
     }
 
     // Select Employee by ID
@@ -53,7 +56,6 @@ public class EmployeeController {
     }
 
     // Create New Employee
-
     @PostMapping("/employees")
     public ResponseEntity<String> createEmployee(@RequestBody Employee employee) {
         // chesk if id already exist
@@ -65,45 +67,27 @@ public class EmployeeController {
         return ResponseEntity.ok("Employee created success!");
     }
 
-    // update employee with some fields using patch
-    // @PatchMapping("/employees/{id}")
-    // public ResponseEntity<String> patchEmployee(@PathVariable long id,
-    // @RequestBody HashMap<String, Object> fieldstoupdate) {
-    // // check if id not exists
-    // if (!employeesDB.containsKey(id)) {
-    // // return error message
-    // return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee not
-    // found");
-    // }
+    // partial update employee with some fields using patch
+    @PatchMapping("/employees/{id}")
+    public ResponseEntity<String> patchEmployee(@PathVariable long id, @RequestBody EmployeeDTO empDto) {
+        // find employee by id
+        Optional<Employee> optEmployee = employeeRespository.findById(id);
+        // check if id exists
+        if (!optEmployee.isPresent()) {
+            // return error message
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee not found");
+        }
+        // get employee from db
+        Employee emp = optEmployee.get();
 
-    // // get employee from db
-    // Employee emp = employeesDB.get(id);
-    // // loop throught fields to update
-    // fieldstoupdate.forEach((key, value) -> {
-    // // check if field is firstname
-    // if (key.equals("fname")) {
-    // // update firstname
-    // emp.setFname((String) value);
-    // }
-    // // check if field is lastname
-    // if (key.equals("lname")) {
-    // // update lastname
-    // emp.setLname((String) value);
-    // }
-    // // check if field is salary
-    // if (key.equals("salary")) {
-    // // update salary
-    // emp.setSalary(Long.valueOf("" + value));
-    // }
+        // update employee by using mapper from dto
+        employeeMapper.updateEmployeeFromDto(empDto, emp);
 
-    // });
+        // save to db
+        employeeRespository.save(emp);
 
-    // // update employee
-    // employeesDB.put(id, emp);
-
-    // // return success message
-    // return ResponseEntity.ok("Employee updated");
-    // }
+        return ResponseEntity.ok("Employee updated");
+    }
 
     // update employee
     @PutMapping("/employees/")
